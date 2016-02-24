@@ -11,5 +11,6 @@
 @interface UITextView (Placeholder)
 
 @property (nonatomic, copy)IBInspectable NSString *placeholder;
+@property (nonatomic, strong)IBInspectable UIColor *placeholderColor;
 
 @end

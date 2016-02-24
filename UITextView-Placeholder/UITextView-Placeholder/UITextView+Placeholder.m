@@ -46,12 +46,23 @@ static CGFloat kTopMargin = 8;
     return objc_getAssociatedObject(self, @selector(placeholder));
 }
 
+- (void)setPlaceholderColor:(UIColor *)placeholderColor {
+    if (self.placeholderColor != placeholderColor) {
+        objc_setAssociatedObject(self, @selector(placeholderColor), placeholderColor, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+        self.label.textColor = placeholderColor;
+    }
+}
+
+- (UIColor *)placeholderColor {
+    return objc_getAssociatedObject(self, @selector(placeholderColor));
+}
+
 - (UILabel *)label {
     UILabel *label = objc_getAssociatedObject(self, @selector(label));
     if (label == nil) {
         label = [[UILabel alloc] init];
         label.font = self.font ? : [UIFont systemFontOfSize:14];
-        label.textColor = [UIColor colorWithRed:204/255.0 green:204/255.0 blue:204/255.0 alpha:1];
+        label.textColor = self.placeholderColor ? : [UIColor colorWithRed:204/255.0 green:204/255.0 blue:204/255.0 alpha:1];
         label.textAlignment = NSTextAlignmentLeft;
         label.numberOfLines = 0;
         [self addSubview:label];
