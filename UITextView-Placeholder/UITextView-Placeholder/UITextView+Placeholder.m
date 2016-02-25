@@ -24,8 +24,11 @@ static CGFloat kTopMargin = 8;
     [self swizzledDealloc];
 }
 
-- (void)textDidChangee:(NSNotification *)notification {
+- (void)textDidChange:(NSNotification *)notification {
     self.label.hidden = self.text.length;
+    if (self.text.length > self.maxLength && self.markedTextRange == nil) {
+        self.text = [self.text substringToIndex:self.maxLength];
+    }
 }
 
 - (void)setPlaceholder:(NSString *)placeholder {
@@ -38,7 +41,7 @@ static CGFloat kTopMargin = 8;
                                              attributes:@{NSFontAttributeName:self.label.font}
                                                 context:nil].size;
         self.label.frame = CGRectMake(kLeftMargin, kTopMargin, size.width, size.height);
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChangee:) name:UITextViewTextDidChangeNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:) name:UITextViewTextDidChangeNotification object:nil];
     }
 }
 
@@ -70,6 +73,16 @@ static CGFloat kTopMargin = 8;
     }
     
     return label;
+}
+
+- (void)setMaxLength:(NSInteger)maxLength {
+    if (self.maxLength != maxLength && maxLength > 0) {
+        objc_setAssociatedObject(self, @selector(maxLength), @(maxLength), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    }
+}
+
+- (NSInteger)maxLength {
+    return [objc_getAssociatedObject(self, @selector(maxLength)) integerValue];
 }
 
 @end
