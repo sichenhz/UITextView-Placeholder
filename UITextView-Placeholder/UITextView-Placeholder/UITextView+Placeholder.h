@@ -11,7 +11,11 @@
 @interface UITextView (Placeholder)
 
 @property (nonatomic, copy)IBInspectable NSString *placeholder;
+
 @property (nonatomic, strong)IBInspectable UIColor *placeholderColor;
+
 @property (nonatomic, assign)IBInspectable NSInteger maxLength;
+
+@property (nonatomic, copy) void (^textDidChange)(NSString *text);
 
 @end

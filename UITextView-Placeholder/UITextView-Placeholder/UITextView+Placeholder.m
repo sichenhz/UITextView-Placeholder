@@ -45,6 +45,9 @@ static CGFloat kTopMargin = 8;
     if (self.text.length > self.maxLength && self.markedTextRange == nil && self.maxLength > 0) {
         self.text = [self.text substringToIndex:self.maxLength];
     }
+    if (self.textDidChange) {
+        self.textDidChange(self.text);
+    }
 }
 
 // KVO
@@ -87,6 +90,12 @@ static CGFloat kTopMargin = 8;
     }
 }
 
+- (void)setTextDidChange:(void (^)(NSString *))textDidChange {
+    if (self.textDidChange != textDidChange) {
+        objc_setAssociatedObject(self, @selector(textDidChange), textDidChange, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    }
+}
+
 #pragma Getter
 
 - (NSString *)placeholder {
@@ -99,6 +108,10 @@ static CGFloat kTopMargin = 8;
 
 - (NSInteger)maxLength {
     return [objc_getAssociatedObject(self, @selector(maxLength)) integerValue];
+}
+
+- (void (^)(NSString *text))textDidChange {
+    return objc_getAssociatedObject(self, @selector(textDidChange));
 }
 
 - (UILabel *)label {
