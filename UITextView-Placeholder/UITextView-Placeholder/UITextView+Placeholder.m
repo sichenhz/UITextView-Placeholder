@@ -39,13 +39,15 @@ static CGFloat kTopMargin = 8;
     [self swizzledDealloc];
 }
 
+// Notification
 - (void)textDidChange:(NSNotification *)notification {
     self.label.hidden = self.text.length;
-    if (self.text.length > self.maxLength && self.markedTextRange == nil) {
+    if (self.text.length > self.maxLength && self.markedTextRange == nil && self.maxLength > 0) {
         self.text = [self.text substringToIndex:self.maxLength];
     }
 }
 
+// KVO
 - (void)observeValueForKeyPath:(NSString *)keyPath
                       ofObject:(id)object
                         change:(NSDictionary *)change
@@ -62,19 +64,14 @@ static CGFloat kTopMargin = 8;
     self.label.frame = CGRectMake(kLeftMargin, kTopMargin, size.width, size.height);
 }
 
+#pragma mark - Setter
+
 - (void)setPlaceholder:(NSString *)placeholder {
     if (self.placeholder != placeholder) {
         objc_setAssociatedObject(self, @selector(placeholder), placeholder, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
         self.label.text = placeholder;
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:) name:UITextViewTextDidChangeNotification object:nil];
-        for (NSString *key in self.class.observingKeys) {
-            [self addObserver:self forKeyPath:key options:NSKeyValueObservingOptionNew context:nil];
-        }
+        [self layoutLabel];
     }
-}
-
-- (NSString *)placeholder {
-    return objc_getAssociatedObject(self, @selector(placeholder));
 }
 
 - (void)setPlaceholderColor:(UIColor *)placeholderColor {
@@ -84,8 +81,24 @@ static CGFloat kTopMargin = 8;
     }
 }
 
+- (void)setMaxLength:(NSInteger)maxLength {
+    if (self.maxLength != maxLength && maxLength > 0) {
+        objc_setAssociatedObject(self, @selector(maxLength), @(maxLength), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    }
+}
+
+#pragma Getter
+
+- (NSString *)placeholder {
+    return objc_getAssociatedObject(self, @selector(placeholder));
+}
+
 - (UIColor *)placeholderColor {
     return objc_getAssociatedObject(self, @selector(placeholderColor));
+}
+
+- (NSInteger)maxLength {
+    return [objc_getAssociatedObject(self, @selector(maxLength)) integerValue];
 }
 
 - (UILabel *)label {
@@ -99,19 +112,13 @@ static CGFloat kTopMargin = 8;
         label.numberOfLines = 0;
         [self addSubview:label];
         objc_setAssociatedObject(self, @selector(label), label, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:) name:UITextViewTextDidChangeNotification object:self];
+        for (NSString *key in self.class.observingKeys) {
+            [self addObserver:self forKeyPath:key options:NSKeyValueObservingOptionNew context:nil];
+        }
     }
-    
     return label;
-}
-
-- (void)setMaxLength:(NSInteger)maxLength {
-    if (self.maxLength != maxLength && maxLength > 0) {
-        objc_setAssociatedObject(self, @selector(maxLength), @(maxLength), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-    }
-}
-
-- (NSInteger)maxLength {
-    return [objc_getAssociatedObject(self, @selector(maxLength)) integerValue];
 }
 
 @end
