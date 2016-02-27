@@ -59,6 +59,8 @@ static CGFloat kTopMargin = 8;
 }
 
 - (void)layoutLabel {
+    self.label.hidden = self.text.length;
+
     CGSize rectangleSize = CGSizeMake(self.frame.size.width - kLeftMargin * 2, MAXFLOAT);
     CGSize size = [self.placeholder boundingRectWithSize:rectangleSize
                                                  options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading | NSStringDrawingTruncatesLastVisibleLine
