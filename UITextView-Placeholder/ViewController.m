@@ -21,10 +21,10 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     
-    NSMutableParagraphStyle *styleM = [[NSMutableParagraphStyle alloc] init];
-    styleM.lineSpacing = 10;
+    NSMutableParagraphStyle *paragraphM = [[NSMutableParagraphStyle alloc] init];
+    paragraphM.lineSpacing = 10;
     NSMutableAttributedString *attrStrM = [[NSMutableAttributedString alloc] initWithString:@"Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu"];
-    [attrStrM addAttribute:NSParagraphStyleAttributeName value:styleM range:NSMakeRange(0, attrStrM.length)];
+    [attrStrM addAttribute:NSParagraphStyleAttributeName value:paragraphM range:NSMakeRange(0, attrStrM.length)];
 
     self.textView2.attributedPlaceholder = [attrStrM copy];
 }
