@@ -14,6 +14,8 @@
 
 @property (nonatomic, strong)IBInspectable UIColor *placeholderColor;
 
+@property (nonatomic, strong) NSAttributedString *attributedPlaceholder;
+
 @property (nonatomic, assign)IBInspectable NSInteger maxLength;
 
 @property (nonatomic, copy) void (^textDidChange)(NSString *text);
