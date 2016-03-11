@@ -17,12 +17,12 @@
 }
 
 + (NSArray *)observingKeys {
-    return @[@"attributedText",
+    return @[@"font",
+             @"textAlignment",
              @"bounds",
-             @"font",
              @"frame",
              @"text",
-             @"textAlignment",
+             @"attributedText",
              @"textContainerInset"];
 }
 
@@ -62,11 +62,6 @@
 }
 
 - (void)layoutPlaceholderLabel {
-    if (self.text.length) {
-        [self.placeholderLabel removeFromSuperview];
-        return;
-    }
-    [self insertSubview:self.placeholderLabel atIndex:0];
     
     self.placeholderLabel.font = self.font;
     self.placeholderLabel.textAlignment = self.textAlignment;
@@ -97,6 +92,7 @@
         placeholderLabel.textAlignment = NSTextAlignmentLeft;
         placeholderLabel.userInteractionEnabled = NO;
         placeholderLabel.numberOfLines = 0;
+        [self addSubview:placeholderLabel];
         objc_setAssociatedObject(self, @selector(placeholderLabel), placeholderLabel, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     }
     return placeholderLabel;
