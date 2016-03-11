@@ -63,6 +63,7 @@
 
 - (void)layoutPlaceholderLabel {
     
+    self.placeholderLabel.hidden = self.text.length || self.attributedText.length;
     self.placeholderLabel.font = self.font;
     self.placeholderLabel.textAlignment = self.textAlignment;
     
